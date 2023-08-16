@@ -1,1 +1,28 @@
 # Looker-Codes
+Order Status by Country
+SELECT 
+    oi.product_id as product_id, 
+    p.name as product_name, 
+    p.category as product_category, 
+    COUNT(*) as num_of_orders,
+    oi.status as order_item_status,
+    u.country as user_country,
+    u.traffic_source as user_traffic_source
+FROM 
+    `bigquery-public-data.thelook_ecommerce.products` as p 
+JOIN 
+    `bigquery-public-data.thelook_ecommerce.order_items` as oi
+ON 
+    p.id = oi.product_id
+JOIN
+    `bigquery-public-data.thelook_ecommerce.orders` as o
+ON
+    oi.order_id = o.order_id
+JOIN
+    `bigquery-public-data.thelook_ecommerce.users` as u
+ON
+    o.user_id = u.id
+GROUP BY 
+    1, 2, 3, 5, 6, 7
+ORDER BY 
+    order_item_status, user_country, user_traffic_source; 
